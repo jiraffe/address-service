@@ -15,9 +15,9 @@ import com.danco.addresswrap.exception.AddressNotFoundException;
 public class OSMReqestService extends RequestService {
 
 	private static final String URL = "http://nominatim.openstreetmap.org/search.php?addressdetails=1&format=json&q=";
+	private static final CharSequence STREET_STUB = "улица ";
 	private static final Object LATITUDE_KEY = "lat";
 	private static final Object LONGITUDE_KEY = "lon";
-	private static final CharSequence STREET_STUB = "СѓР»РёС†Р° ";
 	private static final Object ADDRESS_KEY = "address";
 	private static final Object CITY_KEY = "city";
 	private static final Object HOUSE_NUMBER_KEY = "house_number";

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,11 @@ public class AddressRequestController {
 	@Autowired
 	private AddressService addressService;
 	
+	private static final String PARSING_ERROR_MSG = "Error in parsing";
+	private static final String ADDRESS_NOT_FOUND_MSG = "Address not found exception";
+	private static final String CHECKING_SERVICES_NOT_AVALIABLE = "One or more services for checking address are not avaliable";
+	
+	
 	/**
 	 * 
 	 * @param request
@@ -36,7 +43,7 @@ public class AddressRequestController {
 	@RequestMapping(value="/check", method = RequestMethod.GET)
     public @ResponseBody Map<String, Object> getAddress(@RequestParam(value="city") String city, @RequestParam(value="street") String street, @RequestParam(value="building") String building) {
 		
-		if(city == null || street == null || building == null)	{
+		if((city == null || city.length() == 0) || (street == null || street.length() == 0) || (building == null || building.length() == 0))	{
 			return mapError("Check address parameters");
 		}
 		
@@ -45,18 +52,28 @@ public class AddressRequestController {
 			address = messageConverter.parseRequest(city, street, building);
 			return mapSuccess(address);
 		} catch (ParseException e) {
-			return mapError("Error in parsing");
+			return mapError(PARSING_ERROR_MSG);
 		} catch (AddressNotFoundException e) {
-			return mapError("Address not found exception");
+			return mapError(ADDRESS_NOT_FOUND_MSG);
 		} catch (IOException e) {
-			return mapError("One or more services for checking address are not avaliable");
+			return mapError(CHECKING_SERVICES_NOT_AVALIABLE);
 		}
     }
 	
 	@RequestMapping(value="/add", method = RequestMethod.POST)
-	public @ResponseBody Map<String, Object> addAddress(@RequestBody Object data) {
-		System.out.println(data);
-		return null;
+	public @ResponseBody Map<String, Object> addAddress(@RequestBody String data) {
+		
+		JSONObject parsedAddress;
+		try {
+			JSONParser parser = new JSONParser();
+			parsedAddress = (JSONObject)parser.parse(data);
+		} catch (ParseException e) {
+			return mapError(ADDRESS_NOT_FOUND_MSG);
+		}
+		
+		addressService.saveAddress(parsedAddress);
+		
+		return mapSuccess(data);
 	}
 	
 	
