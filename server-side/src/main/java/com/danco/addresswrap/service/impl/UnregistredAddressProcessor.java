@@ -13,9 +13,7 @@ import com.danco.addresswrap.domain.Address;
 import com.danco.addresswrap.exception.AddressNotFoundException;
 import com.danco.addresswrap.service.ApplicationContextService;
 import com.danco.addresswrap.service.parser.OSMReqestService;
-import com.danco.addresswrap.service.parser.OSM_RURequestService;
 import com.danco.addresswrap.service.parser.RequestService;
-import com.danco.addresswrap.service.parser.YandexRequestService;
 
 @Service
 @Scope("singleton")
@@ -30,8 +28,6 @@ public class UnregistredAddressProcessor {
 	@Autowired
 	public void registerServices() {
 		services.add((RequestService) contextService.getBean(OSMReqestService.class));
-		services.add((RequestService) contextService.getBean(OSM_RURequestService.class));
-		services.add((RequestService) contextService.getBean(YandexRequestService.class));
 	}
 	
 	public Address processServiceChain() throws IOException, ParseException, AddressNotFoundException	{
