@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Сервис проверки адреса</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+    <script type="text/javascript" src="mapModule.js"></script>
+    <script type="text/javascript" src="addressModule.js"></script>
+    
+    <style type="text/css">
+        body, html {
+            height: 100%;
+        }
+    </style>
+
+    <script type="text/javascript">
+        ymaps.ready(mapModule.init);
+    </script>
+</head>
+
+<body>
+
+        <div class="container">
+            <div class="header">
+                <h3 class="text-muted">Сервис добавления адреса</h3>
+            </div>
+
+        <div name="errorsBox" class="alert alert-danger" style="display:none;"></div>
+
+        <form class="form-horizontal" role="form" name="addressData" id="theForm">
+            <div class="form-group">
+                <label for="cityInput" class="col-sm-2 control-label">Город</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="cityInput" placeholder="Город" name="cityInput">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="streetInput" class="col-sm-2 control-label">Улица</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="streetInput" placeholder="Улица" name="streetInput">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="buildingInput" class="col-sm-2 control-label">Дом</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="buildingInput" placeholder="Дом" name="buildingInput">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="latitudeInput" class="col-sm-2 control-label">Широта</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="latitudeInput" placeholder="Широта" name="latitudeInput">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="longtitudeInput" class="col-sm-2 control-label">Долгота</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="longtitudeInput" placeholder="Долгота" name="longtitudeInput">
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-4">
+                    <p>
+                        <button type="button" class="btn btn-warning" onclick="addressModule.check()">Проверить</button>
+                        <button type="button" class="btn btn-success" onclick="addressModule.add()">Добавить новый адрес</button>
+                    </p>
+                </div>
+            </div>
+        </form>
+
+        <div id="map" style="height:550px; width:100%"></div>
+    </div> <!-- //container -->
+
+
+
+</body>
+
+<!-- 
+
+TODO:
+- если адреса нету вернуть спецовыю ошибку (в идеале аналогично как OSM)
+- добавить передачу координат
+
+- проверка на валидность добавляемого адреса (координаты реальные, город и улица не пустые, номер числовой и положительный)
+
+
+DONE:
+- сервис для добавления нового адреса в базу
+- если нашли у других провайдеров - добавить копию к себе
+- простой UI  к этому сервису
+- API для быстрой прикрутки другихпровайдеров
+-->
+</html>
