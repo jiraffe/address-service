@@ -1,9 +1,13 @@
 package com.danco.addresswrap.domain;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,6 +39,9 @@ public class Address {
 	
 	@Column(name="building")
 	private String building;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
+	private List<Synonym> synonims;
 	
 	public Address(String country, String state, String city, String street, String building) {
 		super();
@@ -111,5 +118,13 @@ public class Address {
 
 	public void setBuilding(String building) {
 		this.building = building;
+	}
+
+	public List<Synonym> getSynonims() {
+		return synonims;
+	}
+
+	public void setSynonims(List<Synonym> synonims) {
+		this.synonims = synonims;
 	}
 }
