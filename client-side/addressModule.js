@@ -2,7 +2,7 @@ var addressModule = (function () {
 
     // privates
     var service_url = "/addresswrap/",
-        checkAddressUrl = "address?q=",
+        checkAddressUrl = "check?",
         addAddressUrl = "add",
         isFormValid = false;
 
@@ -67,7 +67,7 @@ var addressModule = (function () {
             building = document.querySelector("#buildingInput").value;
         
 
-        request("GET", service_url + checkAddressUrl + city + " " + street + " " + building, callback);
+        request("GET", service_url + checkAddressUrl + "city=" + city + "&street=" + street + "&building=" + building, callback);
     }
 
     function addAddress () {

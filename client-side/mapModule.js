@@ -59,8 +59,6 @@ var mapModule = (function(){
     function setLatLon(coords) {
         formData.latitude.value = coords[0];
         formData.longitude.value = coords[1];
-
-        console.log(formData);
     }
 
     function getAddress(coords) {
@@ -68,7 +66,6 @@ var mapModule = (function(){
             var firstGeoObject = res.geoObjects.get(0);
             initFormData(firstGeoObject.properties.get('text'));
         });
-        console.log(this);
         setLatLon(coords);
     }
 
