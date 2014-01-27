@@ -76,6 +76,7 @@ var addressModule = (function () {
             building = document.querySelector("#buildingInput").value,
             latitude = document.querySelector("#latitudeInput").value,
             longtitude = document.querySelector("#longtitudeInput").value,
+            synonims = document.querySelector('#synonimsInput'),
             errorsBox = document.querySelector("[name='errorsBox'");
 
             if(!city || !street || !building || !latitude || !longtitude)   {
@@ -92,7 +93,8 @@ var addressModule = (function () {
                 street: street,
                 building: building,
                 latitude: latitude,
-                longtitude: longtitude
+                longtitude: longtitude,
+                synonims: synonims
             }, callback);
     }
 
