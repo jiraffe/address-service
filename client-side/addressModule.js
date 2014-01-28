@@ -76,7 +76,7 @@ var addressModule = (function () {
             building = document.querySelector("#buildingInput").value,
             latitude = document.querySelector("#latitudeInput").value.substring(0, 10),
             longtitude = document.querySelector("#longtitudeInput").value.substring(0, 10),
-            synonims = document.querySelector('#synonimsInput'),
+            synonyms = document.querySelector('#synonymsInput').value,
             errorsBox = document.querySelector("[name='errorsBox'"),
             i;
 
@@ -87,9 +87,9 @@ var addressModule = (function () {
                 return;
             }
 
-            synonims = synonims.split(',');
-            for(i = 0; synonims.length; i++)    {
-                s[i] = s[i].trim();
+            synonyms = synonyms.split(',');
+            for(i = 0; i < synonyms.length; i++)    {
+                synonyms[i] = synonyms[i].trim();
             }
 
             errorsBox.style.display = "none";
@@ -100,7 +100,7 @@ var addressModule = (function () {
                 building: building,
                 latitude: latitude,
                 longtitude: longtitude,
-                synonims: synonims + ''
+                synonyms: synonyms + ''
             }, callback);
     }
 
