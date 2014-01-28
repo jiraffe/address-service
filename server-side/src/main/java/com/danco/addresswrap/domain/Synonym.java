@@ -9,8 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Synonym")
+@JsonAutoDetect
 public class Synonym {
 
 	@Id
@@ -18,21 +22,18 @@ public class Synonym {
 	@GeneratedValue
 	private Integer id;
 	
-	@Column(name="key")
-	private String key;
+	@Column(name="synonym_key")
+	private String synonymKey;
 	
-	@Column(name="value")
-	private String value;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
 	@JoinColumn(name = "address_id", nullable = false)
 	private Address address;
 
-	public Synonym(Integer id, String key, String value) {
+	public Synonym(Integer id, String synonymKey) {
 		super();
 		this.id = id;
-		this.key = key;
-		this.value = value;
+		this.synonymKey = synonymKey;
 	}
 
 	public Synonym() {
@@ -47,20 +48,12 @@ public class Synonym {
 		this.id = id;
 	}
 
-	public String getKey() {
-		return key;
+	public String getSynonymKey() {
+		return synonymKey;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public void setSynonymKey(String key) {
+		this.synonymKey = key;
 	}
 
 	public Address getAddress() {

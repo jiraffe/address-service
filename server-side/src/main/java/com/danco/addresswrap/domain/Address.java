@@ -10,8 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 @Entity
 @Table(name="Address")
+@JsonAutoDetect
 public class Address {
 
 	@Id
@@ -40,7 +43,7 @@ public class Address {
 	@Column(name="building")
 	private String building;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "address")
 	private List<Synonym> synonims;
 	
 	public Address(String country, String state, String city, String street, String building) {
