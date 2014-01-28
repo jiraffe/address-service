@@ -6,7 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import com.danco.addresswrap.domain.Address;
 
-public class AddressConverterHelper {
+public class JSONConverterHelper {
 	
 	private static final Object LATITUDE_KEY = "latitude";
 	private static final Object LONGITUDE_KEY = "longtitude";
