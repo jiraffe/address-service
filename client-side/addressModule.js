@@ -74,16 +74,22 @@ var addressModule = (function () {
         var city = document.querySelector("#cityInput").value,
             street = document.querySelector("#streetInput").value,
             building = document.querySelector("#buildingInput").value,
-            latitude = document.querySelector("#latitudeInput").value,
-            longtitude = document.querySelector("#longtitudeInput").value,
+            latitude = document.querySelector("#latitudeInput").value.substring(0, 10),
+            longtitude = document.querySelector("#longtitudeInput").value.substring(0, 10),
             synonims = document.querySelector('#synonimsInput'),
-            errorsBox = document.querySelector("[name='errorsBox'");
+            errorsBox = document.querySelector("[name='errorsBox'"),
+            i;
 
             if(!city || !street || !building || !latitude || !longtitude)   {
 
                 errorsBox.style.display = "block";
                 errorsBox.innerHTML = "Необходимо заполнить все поля";
                 return;
+            }
+
+            synonims = synonims.split(',');
+            for(i = 0; synonims.length; i++)    {
+                s[i] = s[i].trim();
             }
 
             errorsBox.style.display = "none";
@@ -94,7 +100,7 @@ var addressModule = (function () {
                 building: building,
                 latitude: latitude,
                 longtitude: longtitude,
-                synonims: synonims
+                synonims: synonims + ''
             }, callback);
     }
 
