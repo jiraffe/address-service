@@ -1,5 +1,7 @@
 package com.danco.addresswrap.service.impl;
 
+import java.io.Serializable;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.danco.addresswrap.dao.AddressDao;
 import com.danco.addresswrap.domain.Address;
-import com.danco.addresswrap.helper.AddressConverterHelper;
+import com.danco.addresswrap.helper.JSONConverterHelper;
 import com.danco.addresswrap.service.AddressService;
 
 @Service
@@ -18,8 +20,8 @@ public class AddressServiceImpl implements AddressService {
 	
 	@Override
 	@Transactional
-	public void saveAddress(Address address) {
-		dao.saveAddress(address);
+	public Serializable saveAddress(Address address) {
+		return dao.saveAddress(address);
 	}
 
 	@Override
@@ -30,8 +32,18 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	@Transactional
-	public void saveAddress(JSONObject parsedAddress) {
-		this.saveAddress(AddressConverterHelper.getAddressFromJSON(parsedAddress));
+	public Address saveAddress(JSONObject parsedAddress) {
+		
+		Address address = JSONConverterHelper.getAddressFromJSON(parsedAddress);
+		this.saveAddress(address);
+		
+		return address;
+	}
+
+	@Override
+	@Transactional
+	public Address getAddresBySynonimAndCity(String city, String synonim) {
+		return dao.getAddressBySynonim(city, synonim);
 	}
 
 }
