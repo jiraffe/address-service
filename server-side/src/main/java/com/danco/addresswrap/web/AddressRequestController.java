@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.danco.addresswrap.domain.Address;
 import com.danco.addresswrap.exception.AddressNotFoundException;
+import com.danco.addresswrap.helper.JSONConverterHelper;
 import com.danco.addresswrap.service.AddressService;
 import com.danco.addresswrap.service.RequestMessageConverter;
 import com.danco.addresswrap.service.SynonymService;
+
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Controller
 public class AddressRequestController {
@@ -60,15 +62,25 @@ public class AddressRequestController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value=CHECK_URL, method = RequestMethod.GET)
-    public @ResponseBody Map<String, Object> getAddress(@RequestParam(value="city") String city, @RequestParam(value="street") String street, @RequestParam(value="building") String building) {
+    public @ResponseBody Map<String, Object> getAddress(
+				@RequestParam(value="city") String city, 
+				@RequestParam(value="street") String street, 
+				@RequestParam(value="building") String building, 
+				@RequestParam(value="synonym") String synonym
+    	) {
 		
-		if((city == null || city.length() == 0) || (street == null || street.length() == 0) || (building == null || building.length() == 0))	{
+		
+		if(isEmpty(city) && isEmpty(synonym))	{
+			return mapError(PARAMS_NOT_FILLED);
+		}
+		
+		if(isEmpty(city) && isEmpty(street) && isEmpty(building))	{
 			return mapError(PARAMS_NOT_FILLED);
 		}
 		
 		Address address;
 		try {
-			address = messageConverter.parseRequest(city, street, building);
+			address = messageConverter.parseRequest(city, street, building, synonym);
 			return mapSuccess(address);
 		} catch (ParseException e) {
 			return mapError(PARSING_ERROR_MSG);
@@ -79,9 +91,24 @@ public class AddressRequestController {
 		}
     }
 	
+	/**
+	 * parse JSON data
+	 * get POSTed address
+	 * check address in db
+	 * 
+	 * if not exists - add them
+	 * 
+	 * check if synonyms are presented
+	 * collect which synonyms are not stored
+	 * 
+	 * store them
+	 * 
+	 * return success map
+	 */
 	@RequestMapping(value=ADD_URL, method = RequestMethod.POST)
 	public @ResponseBody Map<String, Object> addAddress(@RequestBody String data) {
 		
+		//parse JSON data
 		JSONObject parsedObject;
 		try {
 			JSONParser parser = new JSONParser();
@@ -89,23 +116,32 @@ public class AddressRequestController {
 		} catch (ParseException e) {
 			return mapError(ADDRESS_NOT_FOUND_MSG);
 		}
+		//get POSTed address
+		Address address = JSONConverterHelper.getAddressFromJSON(parsedObject);
 		
-		Address address = addressService.saveAddress(parsedObject);
-		
-		//get synonyms
-		JSONArray synonyms = (JSONArray) parsedObject.get(SYNONYMS_KEY);
-		
-		if(synonyms.size() > 0)	{
-			synonymService.saveAddressSynonims(address, synonyms);
+		if((address.getCity() == null || address.getCity().length() == 0) || 
+				(address.getStreet() == null || address.getStreet().length() == 0) || 
+				(address.getBuilding() == null || address.getBuilding().length() == 0))	{
+			return mapError(PARAMS_NOT_FILLED);
 		}
 		
-		return mapSuccess(address);
-	}
-	
-	@RequestMapping(value="/rel", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> checkRel()	{
+		//check address in db
+		Address addressFromDb = addressService.getAddress(address.getCity(), address.getStreet(), address.getBuilding());
 		
-		Address address = addressService.getAddresBySynonimAndCity("гродно", "работа");	
+		//if not exists - add them
+		if (addressFromDb != null) {
+			address = addressFromDb;
+		} else {
+			addressService.saveAddress(address);
+		}
+		
+		//get synonyms
+		String synonyms = (String) parsedObject.get(SYNONYMS_KEY);
+		
+		if(synonyms.length() > 0)	{
+			synonymService.saveAddressSynonims(address, synonyms);
+		}
+
 		
 		return mapSuccess(address);
 	}
