@@ -52,7 +52,12 @@ public class AddressDecoratorImpl implements AddressDecorator {
 	}
 
 	@Override
-	public Address getAddressBySynonym(String city, String synonym) {
-		return null;
+	public Address getAddressBySynonym(String city, String synonym) throws AddressNotFoundException {
+		
+		Address address = addressService.getAddresBySynonimAndCity(city, synonym);
+		
+		if(address == null) throw new AddressNotFoundException();
+		
+		return address;
 	}	
 }
