@@ -14,5 +14,5 @@ public interface AddressService {
 
 	public Address saveAddress(JSONObject parsedAddress);
 	
-	public Address getAddresBySynonimAndCity(String city, String synonim);
+	public Address getAddresBySynonimAndCity(String city, String synonym);
 }

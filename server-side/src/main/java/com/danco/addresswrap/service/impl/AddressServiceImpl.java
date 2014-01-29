@@ -48,8 +48,8 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	@Transactional
-	public Address getAddresBySynonimAndCity(String city, String synonim) {
-		return dao.getAddressBySynonim(city, synonim);
+	public Address getAddresBySynonimAndCity(String city, String synonym) {
+		return dao.getAddressBySynonim(city, synonym);
 	}
 
 }
