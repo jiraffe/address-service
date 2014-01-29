@@ -13,6 +13,6 @@ public interface SynonymService {
 
 	public Serializable saveSynonym(String synonym, Address address);
 
-	public void saveAddressSynonims(Address address, JSONArray synonyms);
+	public void saveAddressSynonims(Address address, String synonyms);
 	
 }
