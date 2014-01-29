@@ -71,10 +71,13 @@ public class AddressRequestController {
 		
 		Address address;
 		
-		if(isEmpty(city) && isEmpty(synonym))	{
-			return mapError(PARAMS_NOT_FILLED);
-		} else {
-			address = addressDecorator.getAddressBySynonym(city, synonym);
+		if(!isEmpty(city) && !isEmpty(synonym))	{
+			try {
+				address = addressDecorator.getAddressBySynonym(city, synonym);
+				return mapSuccess(address);
+			} catch (AddressNotFoundException e) {
+				return mapError(ADDRESS_NOT_FOUND_MSG);
+			}
 		}
 		
 		if(isEmpty(city) && isEmpty(street) && isEmpty(building))	{
