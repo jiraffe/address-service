@@ -21,7 +21,7 @@ var addressModule = (function () {
         if (type === 'POST' && opts) {
 
             xhr.setRequestHeader('Accept', 'application/json');
-            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 
             params = JSON.stringify(opts);
         }
@@ -64,10 +64,11 @@ var addressModule = (function () {
 
         var city = document.querySelector("#cityInput").value,
             street = document.querySelector("#streetInput").value,
-            building = document.querySelector("#buildingInput").value;
+            building = document.querySelector("#buildingInput").value,
+            synonyms = document.querySelector('#synonymsInput').value;
         
 
-        request("GET", service_url + checkAddressUrl + "city=" + city + "&street=" + street + "&building=" + building, callback);
+        request("GET", service_url + checkAddressUrl + "city=" + city + "&street=" + street + "&building=" + building + "&synonym=" + synonyms, callback);
     }
 
     function addAddress () {
@@ -77,7 +78,7 @@ var addressModule = (function () {
             latitude = document.querySelector("#latitudeInput").value.substring(0, 10),
             longtitude = document.querySelector("#longtitudeInput").value.substring(0, 10),
             synonyms = document.querySelector('#synonymsInput').value,
-            errorsBox = document.querySelector("[name='errorsBox'"),
+            errorsBox = document.querySelector("[name='errorsBox']"),
             i;
 
             if(!city || !street || !building || !latitude || !longtitude)   {
