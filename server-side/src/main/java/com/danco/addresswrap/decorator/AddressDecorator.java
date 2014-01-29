@@ -11,6 +11,6 @@ public interface AddressDecorator {
 
 	public Address getAddress(String city, String street, String building) throws AddressNotFoundException, IOException, ParseException;
 
-	public Address getAddressBySynonym(String city, String synonym);
+	public Address getAddressBySynonym(String city, String synonym) throws AddressNotFoundException;
 	
 }
