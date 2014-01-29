@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.danco.addresswrap.decorator.AddressDecorator;
 import com.danco.addresswrap.domain.Address;
 import com.danco.addresswrap.exception.AddressNotFoundException;
 import com.danco.addresswrap.helper.JSONConverterHelper;
 import com.danco.addresswrap.service.AddressService;
-import com.danco.addresswrap.service.RequestMessageConverter;
 import com.danco.addresswrap.service.SynonymService;
 
 import static org.springframework.util.StringUtils.isEmpty;
@@ -28,7 +28,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class AddressRequestController {
 	
 	@Autowired
-	private RequestMessageConverter messageConverter;
+	private AddressDecorator addressDecorator;
 
 	@Autowired
 	private AddressService addressService;
@@ -69,26 +69,33 @@ public class AddressRequestController {
 				@RequestParam(value="synonym") String synonym
     	) {
 		
+		Address address;
 		
 		if(isEmpty(city) && isEmpty(synonym))	{
 			return mapError(PARAMS_NOT_FILLED);
+		} else {
+			address = addressDecorator.getAddressBySynonym(city, synonym);
 		}
 		
 		if(isEmpty(city) && isEmpty(street) && isEmpty(building))	{
 			return mapError(PARAMS_NOT_FILLED);
+		} else {
+			try {
+				address = addressDecorator.getAddress(city, street, building);
+				return mapSuccess(address);
+			} catch (ParseException e) {
+				return mapError(PARSING_ERROR_MSG);
+			} catch (AddressNotFoundException e) {
+				return mapError(ADDRESS_NOT_FOUND_MSG);
+			} catch (IOException e) {
+				return mapError(CHECKING_SERVICES_NOT_AVALIABLE);
+			}
 		}
 		
-		Address address;
-		try {
-			address = messageConverter.parseRequest(city, street, building, synonym);
-			return mapSuccess(address);
-		} catch (ParseException e) {
-			return mapError(PARSING_ERROR_MSG);
-		} catch (AddressNotFoundException e) {
-			return mapError(ADDRESS_NOT_FOUND_MSG);
-		} catch (IOException e) {
-			return mapError(CHECKING_SERVICES_NOT_AVALIABLE);
-		}
+		
+		
+			
+			
     }
 	
 	/**
