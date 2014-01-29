@@ -9,6 +9,6 @@ import com.danco.addresswrap.exception.AddressNotFoundException;
 
 public interface RequestMessageConverter {
 
-	public Address parseRequest(String city, String street, String building) throws AddressNotFoundException, IOException, ParseException;
+	public Address parseRequest(String city, String street, String building, String synonyms) throws AddressNotFoundException, IOException, ParseException;
 	
 }
