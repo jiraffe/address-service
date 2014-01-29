@@ -186,4 +186,13 @@ public class AddressRequestController {
 		return modelMap;
 		
 	}
+	
+	public String[] toLovercase(String ... strings)	{
+		
+		for (int i = 0; i < strings.length; i++) {
+			strings[i] = strings[i].toLowerCase();
+		}
+		
+		return strings;
+	}
 }
