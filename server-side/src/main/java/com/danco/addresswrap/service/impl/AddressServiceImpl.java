@@ -35,9 +35,15 @@ public class AddressServiceImpl implements AddressService {
 	public Address saveAddress(JSONObject parsedAddress) {
 		
 		Address address = JSONConverterHelper.getAddressFromJSON(parsedAddress);
-		this.saveAddress(address);
 		
-		return address;
+		Address addressFromDb = getAddress(address.getCity(), address.getStreet(), address.getBuilding());
+		
+		if (addressFromDb == null) {
+			this.saveAddress(address);
+			return address;
+		}
+		
+		return addressFromDb;
 	}
 
 	@Override
